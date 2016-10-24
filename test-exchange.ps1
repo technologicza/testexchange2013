@@ -1,4 +1,4 @@
-#v15.0
+#v15
 param( [string]$auditlist, $output)
 
 Function Get-CustomHTML ($Header){
@@ -164,6 +164,7 @@ Return $Report
 }
 
 Function Get-BUDelta ([datetime]$inData){
+
 $lastBU = New-TimeSpan -start $inData -End (Get-Date)
 If ($lastBU.TotalHours -le '24')
 {
@@ -439,8 +440,13 @@ Write-Host "Collating Detail for $Target" -ForegroundColor Yellow
 				$storeDetails.Mounted = Get-Ink ($objMailboxStore.Mounted)
 				$storeDetails."Total Users" = $totalUsers
 				$storeDetails."White Space" = $objMailboxStore.AvailableNewMailboxSpace
-				$storeDetails.LastFullBackup = Get-BUDelta ($objMailboxStore.LastFullBackup)
-				$storeTable += $storeDetails
+				
+                If ($objMailboxStore.LastFullBackup -ne $null){
+                $storeDetails.LastFullBackup = Get-BUDelta ($objMailboxStore.LastFullBackup)
+				}
+                Else {$storeDetails.LastFullBackup = 'Never'}
+
+                $storeTable += $storeDetails
 			}
 				$MyReport += Get-HTMLTable ($storeTable)
 			$MyReport += Get-CustomHeaderClose
