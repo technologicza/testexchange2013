@@ -301,8 +301,11 @@ if ($StartDate -eq $null -and $EndDate -eq $null){
 Write-Host "Currently unable to calculate estimate time require per Exchange server" -ForegroundColor Yellow
 }
 else{
+	 $EstimatedTime = ($EndDate - $StartDate).TotalMinutes
+	Write-Host "Estimated processing time required per Exchange server is $EstimatedTime minutes" -ForegroundColor Yellow
 
 }
+$StartDate = Get-Date
 	Write-Host "..getting basic computer configuration"
 	$ComputerSystem = Get-WmiObject -computername $Target Win32_ComputerSystem
 	switch ($ComputerSystem.DomainRole){
